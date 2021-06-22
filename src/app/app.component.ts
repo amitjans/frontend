@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,14 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'frontend';
+
+  constructor(private translateService: TranslateService){
+    this.translateService.setDefaultLang('es');
+    this.translateService.use(localStorage.getItem('lang') || 'es');
+  }
+
+  changeLang(code: string) {
+    localStorage.setItem('lang', code);
+    window.location.reload();
+  }
 }
