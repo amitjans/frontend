@@ -5,6 +5,7 @@ import { HttpClient, HttpClientModule } from "@angular/common/http";
 import { RouterModule, Route } from "@angular/router";
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { DataTablesModule } from "angular-datatables";
 
 import { AppComponent } from './app.component';
 import { AudioComponent } from './components/audio/audio.component';
@@ -57,6 +58,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   imports: [
     BrowserModule,
+    DataTablesModule,
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot(routes),

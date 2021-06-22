@@ -1,94 +1,48 @@
 <div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <h2> {{'LED.TITLE' | translate}}
-            </h2>
-            <span style="float: right;" data-toggle="modal" data-target="#myModal" target="_blank"><span class="fa fa-plus-circle fa-2x"></span></span>
-            <div>
-                <div class="dataTables_wrapper dt-bootstrap5">
-                    <div class="row">
-                        <div class="col-sm-12 col-md-6">
-                            <div class="dataTables_length"><label>{{'DATATABLE.SHOW' | translate}} <select name="example_length" class="form-select form-select-sm">
-                                <option value="10">10</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                            </select> {{'DATATABLE.ENTRIES' | translate}}</label></div>
-                        </div>
-                        <div class="col-sm-12 col-md-6">
-                            <div class="dataTables_filter">
-                                <label>{{'DATATABLE.SEARCH' | translate}}:
-                                    <input type="search" class="form-control form-control-sm" placeholder="">
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr role="row">
-                                        <th class="sorting sorting_asc"
-                                            aria-sort="ascending" aria-label="Name: activate to sort column descending">
-                                            {{'COMMON.NAME' | translate}}</th>
-                                        <th class="sorting" aria-label="Position: activate to sort column ascending">{{'LED.BASE' | translate}}</th>
-                                        <th tabindex="0" colspan="4">{{'COMMON.OPTIONS' | translate}}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let item of table.sublist">
-                                        <td>{{ item.nombre }}</td>
-                                        <td>{{ item.base }}</td>
-                                        <td><span class="btn btn-default" (click)="execute(item)"><i
-                                                    class="fa fa-play fa-sm"></i></span></td>
-                                        <td><span class="btn btn-default" ng-click="clone(item)"><i
-                                                    class="fa fa-clone fa-sm"></i></span></td>
-                                        <td><span class="btn btn-default" ng-click="update(item)"><i
-                                                    class="fa fa-edit fa-sm"></i></span></td>
-                                        <td><span class="btn btn-default" ng-click="delete(item._id)"><i
-                                                    class="fa fa-trash fa-sm"></i></span></td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th>{{'COMMON.NAME' | translate}}</th>
-                                        <th>{{'LED.BASE' | translate}}</th>
-                                        <th colspan="4">{{'COMMON.OPTIONS' | translate}}</th>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-5">
-                            <div class="dataTables_info" id="example_info" role="status" aria-live="polite">
-                                {{ 'DATATABLE.SHOWING' | translate }} {{ table.from }} {{ 'DATATABLE.TO' | translate }}
-                                {{ table.to > table.sublist.length ? table.sublist.length : table.to }} {{ 'DATATABLE.OF' | translate }}
-                                {{ table.sublist.length }} {{ 'DATATABLE.ENTRIES' | translate }}
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-7">
-                            <div class="dataTables_paginate paging_simple_numbers" id="example_paginate">
-                                <ul class="pagination">
-                                    <li class="paginate_button page-item previous {{ table.page == 0 ? 'disabled': '' }}"
-                                        (click)="changePages((table.page == 0 ? 0 : table.page - 1))"><span
-                                            class="page-link">Previous</span></li>
-                                    <li *ngFor="let item of table.pages" (click)="changePages(item - 1)"
-                                        class="paginate_button page-item {{ table.page + 1 == item ? 'active' : '' }}">
-                                        <span class="page-link">{{ item }}</span></li>
-                                    <li class="paginate_button page-item next {{ table.page + 1 == table.maxpage ? 'disabled': '' }}"
-                                        (click)="changePages((table.page + 1 == table.maxpage ? table.maxpage - 1 : table.page + 1 ))">
-                                        <span class="page-link">Next</span></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <div class="row">
+    <div class="col-md-12">
+      <h2> {{'LED.TITLE' | translate}}
+      </h2>
+      <span style="float: right;" data-toggle="modal" data-target="#myModal" target="_blank"><span
+          class="fa fa-plus-circle fa-2x"></span></span>
+      <div>
+        <div class="row">
+          <div class="col-sm-12">
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped">
+              <thead>
+                <tr role="row">
+                  <th> {{'COMMON.NAME' | translate}}</th>
+                  <th>{{'LED.BASE' | translate}}</th>
+                  <th>{{'COMMON.OPTIONS' | translate}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of ledService.leds">
+                  <td>{{ item.nombre }}</td>
+                  <td>{{ item.base }}</td>
+                  <td>
+                    <span class="btn btn-default" (click)="execute(item)"><i class="fa fa-play fa-sm"></i></span>
+                    <span class="btn btn-default" ng-click="clone(item)"><i class="fa fa-clone fa-sm"></i></span>
+                    <span class="btn btn-default" ng-click="update(item)"><i class="fa fa-edit fa-sm"></i></span>
+                    <span class="btn btn-default" ng-click="delete(item._id)"><i class="fa fa-trash fa-sm"></i></span>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>{{'COMMON.NAME' | translate}}</th>
+                  <th>{{'LED.BASE' | translate}}</th>
+                  <th>{{'COMMON.OPTIONS' | translate}}</th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
         </div>
+      </div>
     </div>
-    <!-- Modal Script -->
-    <!-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  </div>
+  <!-- Modal Script -->
+  <!-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -116,5 +70,5 @@
             </div>
         </div>
     </div> -->
-    <!-- Modal Script -->
+  <!-- Modal Script -->
 </div>

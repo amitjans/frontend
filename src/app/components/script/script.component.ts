@@ -1,22 +1,32 @@
-import { Component, OnInit } from '@angular/core';
-import { DatatableService } from "../../services/datatable.service";
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ScriptService } from 'src/app/services/script.service';
 import { NgForm } from '@angular/forms';
 import { Script } from 'src/app/models/script';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-script',
   templateUrl: './script.component.html',
   styleUrls: ['./script.component.css']
 })
-export class ScriptComponent implements OnInit {
+export class ScriptComponent implements OnDestroy, OnInit {
 
-  constructor(public scriptService: ScriptService, public dataTable: DatatableService) { }
+  constructor(public scriptService: ScriptService) { }
 
-  table: any = { limit: 10, page: 0, maxpage: 0, from: 1, to: 10, q: '', total: 0, sublist: [] };
+  dtOptions: DataTables.Settings = {};
+  dtTrigger: Subject<any> = new Subject<any>();
   accion: string = 'Añadir';
 
   ngOnInit(): void {
+    this.dtOptions = {
+      pagingType: 'simple_numbers',
+      pageLength: 10,
+      language: { url: `assets/datatable/i18n/${localStorage.getItem('lang')}.json`},
+      columnDefs: [ {
+        targets: [1],
+        orderable: false
+      } ]
+    };
     this.getScripts();
   }
 
@@ -24,7 +34,7 @@ export class ScriptComponent implements OnInit {
     this.scriptService.getScripts().subscribe(
       res => {
         this.scriptService.scripts = res;
-        this.table = this.dataTable.dataTable(this.scriptService.scripts, this.table, { property: '', order: '' }, "nombre");
+        this.dtTrigger.next();
       },
       err => console.log(err)
     );
@@ -46,7 +56,7 @@ export class ScriptComponent implements OnInit {
           this.getScripts();
         },
         err => console.error(err)
-      )  
+      )
     }
   }
 
@@ -62,13 +72,7 @@ export class ScriptComponent implements OnInit {
     );
   }
 
-  changePages(page: number) {
-    this.table.page = page;
-    this.tableUpdate();
-  }
-
-  tableUpdate() {
-    console.log(this.table.limit);
-    this.table = this.dataTable.dataTable(this.scriptService.scripts, this.table, { property: '', order: '' }, "nombre");
+  ngOnDestroy(): void {
+    this.dtTrigger.unsubscribe();
   }
 }

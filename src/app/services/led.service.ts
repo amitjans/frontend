@@ -7,13 +7,13 @@ import { Led } from '../models/led';
 })
 export class LedService {
 
-  URL_API = 'http://192.168.1.69/api/common?db=led';
+  URL_API = 'http://158.97.89.3/api/common?db=led';
 
-  leds: object[] = [];
+  leds: Led[] = [];
 
   constructor(private http: HttpClient) { }
 
   getLeds() {
-    return this.http.get<object[]>(this.URL_API);
+    return this.http.get<Led[]>(this.URL_API);
   }
 }

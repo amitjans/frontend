@@ -7,7 +7,7 @@ import { Script } from '../models/script';
 })
 export class ScriptService {
 
-  URL_API = 'http://192.168.1.69/api/common';
+  URL_API = 'http://158.97.89.3/api/common';
   URL_DB = '?db=script';
 
   selectedScript: Script = {

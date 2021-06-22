@@ -1,118 +1,72 @@
 <div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <h2> {{'LED.TITLE' | translate}}
-            </h2>
-            <a id="formModal" style="float: right; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#myModal"><span
-                    class="fa fa-plus-circle fa-2x"></span></a>
-            <div>
-                <div class="dataTables_wrapper dt-bootstrap5">
-                    <div class="row">
-                        <div class="col-sm-12 col-md-6">
-                            <div class="dataTables_length"><label>{{'DATATABLE.SHOW' | translate}}
-                                <select class="form-select form-select-sm" [(ngModel)]="table.limit" (ngModelChange)="tableUpdate()">
-                                    <option [ngValue]="10">10</option>
-                                    <option [ngValue]="25">25</option>
-                                    <option [ngValue]="50">50</option>
-                                    <option [ngValue]="100">100</option>
-                                </select> {{'DATATABLE.ENTRIES' | translate}}</label></div>
-                        </div>
-                        <div class="col-sm-12 col-md-6">
-                            <div class="dataTables_filter">
-                                <label>{{'DATATABLE.SEARCH' | translate}}:
-                                    <input type="search" class="form-control form-control-sm" [(ngModel)]="table.q" (ngModelChange)="tableUpdate()">
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr role="row">
-                                        <th class="sorting sorting_asc" aria-sort="ascending"
-                                            aria-label="Name: activate to sort column descending">
-                                            {{'COMMON.NAME' | translate}}</th>
-                                        <th tabindex="0" colspan="2">{{'COMMON.OPTIONS' | translate}}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let item of table.sublist">
-                                        <td>{{ item.nombre }}</td>
-                                        <td><span class="btn btn-default" (click)="editScript(item)"><i
-                                                    class="fa fa-edit fa-sm"></i></span></td>
-                                        <td><span class="btn btn-default" (click)="deleteScript(item._id)"><i
-                                                    class="fa fa-trash fa-sm"></i></span></td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th>{{'COMMON.NAME' | translate}}</th>
-                                        <th colspan="2">{{'COMMON.OPTIONS' | translate}}</th>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-5">
-                            <div class="dataTables_info" id="example_info" role="status" aria-live="polite">
-                                {{ 'DATATABLE.SHOWING' | translate }} {{ table.from }} {{ 'DATATABLE.TO' | translate }}
-                                {{ table.to > table.sublist.length ? table.sublist.length : table.to }} {{
-                                'DATATABLE.OF' | translate }}
-                                {{ table.total }} {{ 'DATATABLE.ENTRIES' | translate }}
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-7">
-                            <div class="dataTables_paginate paging_simple_numbers" id="example_paginate">
-                                <ul class="pagination">
-                                    <li class="paginate_button page-item previous {{ table.page == 0 ? 'disabled': '' }}"
-                                        (click)="changePages((table.page == 0 ? 0 : table.page - 1))"><span
-                                            class="page-link">Previous</span></li>
-                                    <li *ngFor="let item of table.pages" (click)="changePages(item - 1)"
-                                        class="paginate_button page-item {{ table.page + 1 == item ? 'active' : '' }}">
-                                        <span class="page-link">{{ item }}</span>
-                                    </li>
-                                    <li class="paginate_button page-item next {{ table.page + 1 == table.maxpage ? 'disabled': '' }}"
-                                        (click)="changePages((table.page + 1 == table.maxpage ? table.maxpage - 1 : table.page + 1 ))">
-                                        <span class="page-link">Next</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <div class="row">
+    <div class="col-md-12">
+      <h2> {{'LED.TITLE' | translate}}
+      </h2>
+      <a id="formModal" style="float: right; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#myModal"><span
+          class="fa fa-plus-circle fa-2x"></span></a>
+      <div>
+        <div class="row">
+          <div class="col-sm-12">
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped" style="width:100%">
+              <thead>
+                <tr role="row">
+                  <th>{{'COMMON.NAME' | translate}}</th>
+                  <th>{{'COMMON.OPTIONS' | translate}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of scriptService.scripts">
+                  <td>{{ item.nombre }}</td>
+                  <td>
+                    <span class="btn btn-default" (click)="editScript(item)"><i class="fa fa-edit fa-sm"></i></span>
+                    <span class="btn btn-default" (click)="deleteScript(item._id)"><i class="fa fa-trash fa-sm"></i></span>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>{{'COMMON.NAME' | translate}}</th>
+                  <th>{{'COMMON.OPTIONS' | translate}}</th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
         </div>
+      </div>
     </div>
-    <!-- Modal Script -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel" *ngIf="!scriptService.selectedScript._id">{{ 'COMMON.SAVE' | translate }} Script</h4>
-                    <h4 class="modal-title" id="myModalLabel" *ngIf="!!scriptService.selectedScript._id">{{ 'COMMON.UPDATE' | translate }} Script</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true"></span></button>
-                </div>
-                <form #scriptForm="ngForm" (ngSubmit)="addScript(scriptForm)">
-                    <input type="hidden" name="_id" [(ngModel)]="scriptService.selectedScript._id" >
-                    <div class="modal-body">
-                        <div class="form-horizontal" role="form">
-                            <div class="mb-3">
-                                <label class="col-sm-2 control-label">Nombre</label>
-                                <input type="text" class="form-control input-sm" name="nombre" [(ngModel)]="scriptService.selectedScript.nombre" placeholder="Nombre">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" ng-click="clear()">Cerrar</button>
-                        <button type="submit" *ngIf="!scriptService.selectedScript._id" class="btn btn-primary">Salvar</button>
-                        <button type="submit" *ngIf="!!scriptService.selectedScript._id" class="btn btn-primary">Actualizar</button>
-                    </div>
-                </form>
-            </div>
+  </div>
+  <!-- Modal Script -->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="myModalLabel" *ngIf="!scriptService.selectedScript._id">{{ 'COMMON.SAVE' |
+            translate }} Script</h4>
+          <h4 class="modal-title" id="myModalLabel" *ngIf="!!scriptService.selectedScript._id">{{ 'COMMON.UPDATE' |
+            translate }} Script</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><span
+              aria-hidden="true"></span></button>
         </div>
+        <form #scriptForm="ngForm" (ngSubmit)="addScript(scriptForm)">
+          <input type="hidden" name="_id" [(ngModel)]="scriptService.selectedScript._id">
+          <div class="modal-body">
+            <div class="form-horizontal" role="form">
+              <div class="mb-3">
+                <label class="col-sm-2 control-label">Nombre</label>
+                <input type="text" class="form-control input-sm" name="nombre"
+                  [(ngModel)]="scriptService.selectedScript.nombre" placeholder="Nombre">
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" ng-click="clear()">Cerrar</button>
+            <button type="submit" *ngIf="!scriptService.selectedScript._id" class="btn btn-primary">Salvar</button>
+            <button type="submit" *ngIf="!!scriptService.selectedScript._id" class="btn btn-primary">Actualizar</button>
+          </div>
+        </form>
+      </div>
     </div>
-    <!-- Modal Script -->
+  </div>
+  <!-- Modal Script -->
 </div>
