@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgModule } from '@angular/core';
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ScriptService } from 'src/app/services/script.service';
 import { NgForm } from '@angular/forms';
 import { Script } from 'src/app/models/script';
@@ -11,7 +12,7 @@ import { Subject } from 'rxjs';
 })
 export class ScriptComponent implements OnDestroy, OnInit {
 
-  constructor(public scriptService: ScriptService) { }
+  constructor(public scriptService: ScriptService, public modal: NgbModal) { }
 
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
@@ -44,7 +45,7 @@ export class ScriptComponent implements OnDestroy, OnInit {
     if (form.value._id) {
       this.scriptService.updateScript(form.value).subscribe(
         res => {
-          (document.querySelector('.btn-close') as any).click();
+          this.modal.dismissAll();
           this.getScripts();
         },
         err => console.error(err)
@@ -52,7 +53,7 @@ export class ScriptComponent implements OnDestroy, OnInit {
     } else {
       this.scriptService.createScript(form.value).subscribe(
         res => {
-          (document.querySelector('.btn-close') as any).click();
+          this.modal.dismissAll();
           this.getScripts();
         },
         err => console.error(err)
@@ -60,9 +61,9 @@ export class ScriptComponent implements OnDestroy, OnInit {
     }
   }
 
-  editScript(obj: Script) {
+  editScript(obj: Script, contenido: any) {
     this.scriptService.selectedScript = obj;
-    (document.getElementById('formModal') as any).click();
+    this.modal.open(contenido);
   }
 
   deleteScript(id: string) {

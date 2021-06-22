@@ -3,12 +3,13 @@
     <div class="col-md-12">
       <h2> {{'LED.TITLE' | translate}}
       </h2>
-      <a id="formModal" style="float: right; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#myModal"><span
+      <a id="formModal" style="float: right; cursor: pointer;" (click)="modal.open(contenido)"><span
           class="fa fa-plus-circle fa-2x"></span></a>
       <div>
         <div class="row">
           <div class="col-sm-12">
-            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped" style="width:100%">
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped"
+              style="width:100%">
               <thead>
                 <tr role="row">
                   <th>{{'COMMON.NAME' | translate}}</th>
@@ -19,8 +20,9 @@
                 <tr *ngFor="let item of scriptService.scripts">
                   <td>{{ item.nombre }}</td>
                   <td>
-                    <span class="btn btn-default" (click)="editScript(item)"><i class="fa fa-edit fa-sm"></i></span>
-                    <span class="btn btn-default" (click)="deleteScript(item._id)"><i class="fa fa-trash fa-sm"></i></span>
+                    <span class="btn btn-default" (click)="editScript(item, contenido)"><i class="fa fa-edit fa-sm"></i></span>
+                    <span class="btn btn-default" (click)="deleteScript(item._id)"><i
+                        class="fa fa-trash fa-sm"></i></span>
                   </td>
                 </tr>
               </tbody>
@@ -37,36 +39,32 @@
     </div>
   </div>
   <!-- Modal Script -->
-  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title" id="myModalLabel" *ngIf="!scriptService.selectedScript._id">{{ 'COMMON.SAVE' |
-            translate }} Script</h4>
-          <h4 class="modal-title" id="myModalLabel" *ngIf="!!scriptService.selectedScript._id">{{ 'COMMON.UPDATE' |
-            translate }} Script</h4>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><span
-              aria-hidden="true"></span></button>
-        </div>
-        <form #scriptForm="ngForm" (ngSubmit)="addScript(scriptForm)">
-          <input type="hidden" name="_id" [(ngModel)]="scriptService.selectedScript._id">
-          <div class="modal-body">
-            <div class="form-horizontal" role="form">
-              <div class="mb-3">
-                <label class="col-sm-2 control-label">Nombre</label>
-                <input type="text" class="form-control input-sm" name="nombre"
-                  [(ngModel)]="scriptService.selectedScript.nombre" placeholder="Nombre">
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" ng-click="clear()">Cerrar</button>
-            <button type="submit" *ngIf="!scriptService.selectedScript._id" class="btn btn-primary">Salvar</button>
-            <button type="submit" *ngIf="!!scriptService.selectedScript._id" class="btn btn-primary">Actualizar</button>
-          </div>
-        </form>
-      </div>
+  <ng-template #contenido let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="myModalLabel" *ngIf="!scriptService.selectedScript._id">{{ 'COMMON.SAVE' |
+        translate }} Script</h4>
+      <h4 class="modal-title" id="myModalLabel" *ngIf="!!scriptService.selectedScript._id">{{ 'COMMON.UPDATE' |
+        translate }} Script</h4>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><span
+          aria-hidden="true"></span></button>
     </div>
-  </div>
+    <form #scriptForm="ngForm" (ngSubmit)="addScript(scriptForm)">
+      <input type="hidden" name="_id" [(ngModel)]="scriptService.selectedScript._id">
+      <div class="modal-body">
+        <div class="form-horizontal" role="form">
+          <div class="mb-3">
+            <label class="col-sm-2 control-label">Nombre</label>
+            <input type="text" class="form-control input-sm" name="nombre"
+              [(ngModel)]="scriptService.selectedScript.nombre" placeholder="Nombre">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modal.close(contenido)">Cerrar</button>
+        <button type="submit" *ngIf="!scriptService.selectedScript._id" class="btn btn-primary">Salvar</button>
+        <button type="submit" *ngIf="!!scriptService.selectedScript._id" class="btn btn-primary">Actualizar</button>
+      </div>
+    </form>
+  </ng-template>
   <!-- Modal Script -->
 </div>
