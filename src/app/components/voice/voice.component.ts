@@ -21,11 +21,12 @@ export class VoiceComponent implements OnDestroy, OnInit {
     this.dtOptions = {
       pagingType: 'simple_numbers',
       pageLength: 10,
-      language: { url: `assets/datatable/i18n/${localStorage.getItem('lang')}.json`},
-      columnDefs: [ {
-        targets: [1],
+      language: { url: `assets/datatable/i18n/${localStorage.getItem('lang')}.json` },
+      columnDefs: [{
+        targets: [3],
         orderable: false
-      } ]
+      }],
+      retrieve: true
     };
     this.getVoices();
   }
@@ -46,6 +47,7 @@ export class VoiceComponent implements OnDestroy, OnInit {
         res => {
           this.modal.dismissAll();
           this.getVoices();
+          form.reset();
         },
         err => console.error(err)
       )
@@ -54,6 +56,7 @@ export class VoiceComponent implements OnDestroy, OnInit {
         res => {
           this.modal.dismissAll();
           this.getVoices();
+          form.reset();
         },
         err => console.error(err)
       )

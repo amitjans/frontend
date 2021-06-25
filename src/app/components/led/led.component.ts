@@ -21,11 +21,12 @@ export class LedComponent implements OnInit {
     this.dtOptions = {
       pagingType: 'simple_numbers',
       pageLength: 10,
-      language: { url: `assets/datatable/i18n/${localStorage.getItem('lang')}.json`},
-      columnDefs: [ {
+      language: { url: `assets/datatable/i18n/${localStorage.getItem('lang')}.json` },
+      columnDefs: [{
         targets: [2],
         orderable: false
-      } ]
+      }],
+      retrieve: true
     };
     this.getLeds();
   }
