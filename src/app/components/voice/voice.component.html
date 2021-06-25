@@ -1,1 +1,90 @@
-<p>voice works!</p>
+<div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <h2> {{'VOICE.TITLE' | translate}}
+        </h2>
+        <a id="formModal" style="float: right; cursor: pointer;" (click)="modal.open(contenido)"><span
+            class="fa fa-plus-circle fa-2x"></span></a>
+        <div>
+          <div class="row">
+            <div class="col-sm-12">
+              <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped"
+                style="width:100%">
+                <thead>
+                  <tr role="row">
+                    <th>{{'VOICE.LANGUAGE' | translate}}</th>
+                    <th>{{'VOICE.CODE' | translate}}</th>
+                    <th>{{'COMMON.NAME' | translate}}</th>
+                    <th>{{'COMMON.OPTIONS' | translate}}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of voiceService.voices">
+                    <td>{{ item.idioma }}</td>
+                    <td>{{ item.codigo }}</td>
+                    <td>{{ item.nombre }}</td>
+                    <td>
+                      <span class="btn btn-default" (click)="editVoice(item, contenido)"><i
+                          class="fa fa-edit fa-sm"></i></span>
+                      <span class="btn btn-default" (click)="deleteVoice(item._id)"><i
+                          class="fa fa-trash fa-sm"></i></span>
+                    </td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th>{{'VOICE.LANGUAGE' | translate}}</th>
+                    <th>{{'VOICE.CODE' | translate}}</th>
+                    <th>{{'COMMON.NAME' | translate}}</th>
+                    <th>{{'COMMON.OPTIONS' | translate}}</th>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal Voice -->
+    <ng-template #contenido let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel" *ngIf="!voiceService.selectedVoice._id">{{ 'COMMON.SAVE' |
+          translate }} {{'VOICE.VOICE' | translate}}</h4>
+        <h4 class="modal-title" id="myModalLabel" *ngIf="!!voiceService.selectedVoice._id">{{ 'COMMON.UPDATE' |
+          translate }} {{'VOICE.VOICE' | translate}}</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><span
+            aria-hidden="true"></span></button>
+      </div>
+      <form #voiceForm="ngForm" (ngSubmit)="addVoice(voiceForm)">
+        <input type="hidden" name="_id" [(ngModel)]="voiceService.selectedVoice._id">
+        <div class="modal-body">
+          <div class="form-horizontal" role="form">
+            <div class="mb-3">
+              <label class="col-sm-2 control-label">{{'VOICE.LANGUAGE' | translate}}</label>
+              <input type="text" class="form-control input-sm" name="idioma"
+                [(ngModel)]="voiceService.selectedVoice.idioma" placeholder="{{'VOICE.LANGUAGE' | translate}}">
+            </div>
+            <div class="mb-3">
+                <label class="col-sm-2 control-label">{{'VOICE.CODE' | translate}}</label>
+                <input type="text" class="form-control input-sm" name="codigo"
+                  [(ngModel)]="voiceService.selectedVoice.codigo" placeholder="{{'VOICE.CODE' | translate}}">
+            </div>
+            <div class="mb-3">
+                <label class="col-sm-2 control-label">{{'COMMON.NAME' | translate}}</label>
+                <input type="text" class="form-control input-sm" name="nombre"
+                  [(ngModel)]="voiceService.selectedVoice.nombre" placeholder="{{'COMMON.NAME' | translate}}">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="modal.close(contenido)">{{'COMMON.CLOSE' |
+            translate}}</button>
+          <button type="submit" *ngIf="!voiceService.selectedVoice._id" class="btn btn-primary">{{'COMMON.SAVE' |
+            translate}}</button>
+          <button type="submit" *ngIf="!!voiceService.selectedVoice._id" class="btn btn-primary">{{'COMMON.UPDATE' |
+            translate}}</button>
+        </div>
+      </form>
+    </ng-template>
+    <!-- Modal Voice -->
+  </div>

@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <h2> {{'LED.TITLE' | translate}}
+      <h2> {{'SCRIPT.TITLE' | translate}}
       </h2>
       <a id="formModal" style="float: right; cursor: pointer;" (click)="modal.open(contenido)"><span
           class="fa fa-plus-circle fa-2x"></span></a>
@@ -20,7 +20,8 @@
                 <tr *ngFor="let item of scriptService.scripts">
                   <td>{{ item.nombre }}</td>
                   <td>
-                    <span class="btn btn-default" (click)="editScript(item, contenido)"><i class="fa fa-edit fa-sm"></i></span>
+                    <span class="btn btn-default" (click)="editScript(item, contenido)"><i
+                        class="fa fa-edit fa-sm"></i></span>
                     <span class="btn btn-default" (click)="deleteScript(item._id)"><i
                         class="fa fa-trash fa-sm"></i></span>
                   </td>
@@ -42,9 +43,9 @@
   <ng-template #contenido let-modal>
     <div class="modal-header">
       <h4 class="modal-title" id="myModalLabel" *ngIf="!scriptService.selectedScript._id">{{ 'COMMON.SAVE' |
-        translate }} Script</h4>
+        translate }} {{'SCRIPT.MODAL' | translate}}</h4>
       <h4 class="modal-title" id="myModalLabel" *ngIf="!!scriptService.selectedScript._id">{{ 'COMMON.UPDATE' |
-        translate }} Script</h4>
+        translate }} {{'SCRIPT.MODAL' | translate}}</h4>
       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><span
           aria-hidden="true"></span></button>
     </div>
@@ -53,16 +54,19 @@
       <div class="modal-body">
         <div class="form-horizontal" role="form">
           <div class="mb-3">
-            <label class="col-sm-2 control-label">Nombre</label>
+            <label class="col-sm-2 control-label">{{'COMMON.NAME' | translate}}</label>
             <input type="text" class="form-control input-sm" name="nombre"
               [(ngModel)]="scriptService.selectedScript.nombre" placeholder="Nombre">
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="modal.close(contenido)">Cerrar</button>
-        <button type="submit" *ngIf="!scriptService.selectedScript._id" class="btn btn-primary">Salvar</button>
-        <button type="submit" *ngIf="!!scriptService.selectedScript._id" class="btn btn-primary">Actualizar</button>
+        <button type="button" class="btn btn-secondary" (click)="modal.close(contenido)">{{'COMMON.CLOSE' |
+          translate}}</button>
+        <button type="submit" *ngIf="!scriptService.selectedScript._id" class="btn btn-primary">{{'COMMON.SAVE' |
+          translate}}</button>
+        <button type="submit" *ngIf="!!scriptService.selectedScript._id" class="btn btn-primary">{{'COMMON.UPDATE' |
+          translate}}</button>
       </div>
     </form>
   </ng-template>

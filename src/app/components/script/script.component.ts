@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, NgModule } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ScriptService } from 'src/app/services/script.service';
 import { NgForm } from '@angular/forms';
@@ -16,7 +16,6 @@ export class ScriptComponent implements OnDestroy, OnInit {
 
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
-  accion: string = 'Añadir';
 
   ngOnInit(): void {
     this.dtOptions = {
